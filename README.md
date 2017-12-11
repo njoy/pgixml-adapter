@@ -1,5 +1,5 @@
 # pgixml-adapter
-pugixml adapted for the NJOY21 build system
+This is an adaptation of Arseny Kapoulkine's [pugixml](https://github.com/zeux/pugixml) for the NJOY21 build system.
 
 ```bash
 # This only needs to be done once (per clone)

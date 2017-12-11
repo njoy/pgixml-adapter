@@ -34,3 +34,38 @@ message( STATUS "Git current branch: ${GIT_BRANCH}" )
 message( STATUS "Git commit hash: ${GIT_HASH}" )
 message( STATUS "" )
 message( STATUS "-----------------------------------------------------------" )
+
+include( CMakeDependentOption )
+
+option( pugixml-header-only 
+  "compile pugixml as header-only" ON )
+CMAKE_DEPENDENT_OPTION( pugixml_shared_library 
+  "Use shared library"
+  "${BUILD_SHARED_LIBRARIES}"
+  "NOT pugixml-header-only" OFF )
+
+if( pugixml-header-only )
+  add_library( pugixml-adapter INTERFACE )
+  target_sources( pugixml-adapter 
+    INTERFACE 
+      src/src/pugiconfig.hpp 
+      src/src/pugixml.hpp 
+  )
+  target_include_directories( pugixml-adapter INTERFACE src/src )
+else()
+  if( pugixml_shared_library )
+    add_library( pugixml-adapter SHARED "" )
+  else()
+    add_library( pugixml-adapter STATIC "" )
+  endif()
+
+  target_sources( pugixml-adapter 
+    PUBLIC 
+      src/src/pugiconfig.hpp 
+      src/src/pugixml.hpp 
+    PRIVATE
+      src/src/pugixml.cpp 
+  )
+  target_include_directories( pugixml-adapter PUBLIC src/src )
+endif()
+
