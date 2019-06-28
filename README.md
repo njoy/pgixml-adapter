@@ -6,7 +6,7 @@ This is an adaptation of Arseny Kapoulkine's [pugixml](https://github.com/zeux/p
 git remote add pugixml https://github.com/zeux/pugixml.git
 
 # Do this when you need to update the subtree
-git subtree pull --prefix=src pugixml master
+git subtree pull --squash --prefix=src pugixml master
 ```
 
 # License
