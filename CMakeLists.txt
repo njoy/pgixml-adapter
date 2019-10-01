@@ -48,8 +48,8 @@ if( pugixml-header-only )
   add_library( pugixml-adapter INTERFACE )
   target_sources( pugixml-adapter 
     INTERFACE 
-      src/src/pugiconfig.hpp 
-      src/src/pugixml.hpp 
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugiconfig.hpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugixml.hpp"
   )
   target_include_directories( pugixml-adapter INTERFACE src/src )
 else()
@@ -61,10 +61,10 @@ else()
 
   target_sources( pugixml-adapter 
     PUBLIC 
-      src/src/pugiconfig.hpp 
-      src/src/pugixml.hpp 
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugiconfig.hpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugixml.hpp"
     PRIVATE
-      src/src/pugixml.cpp 
+      "${CMAKE_CURRENT_SOURE_DIR}/src/src/pugixml.cpp"
   )
   target_include_directories( pugixml-adapter PUBLIC src/src )
 endif()
