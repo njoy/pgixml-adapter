@@ -38,7 +38,7 @@ message( STATUS "-----------------------------------------------------------" )
 include( CMakeDependentOption )
 
 option( pugixml-header-only 
-  "compile pugixml as header-only" ON )
+  "compile pugixml as header-only" OFF )
 CMAKE_DEPENDENT_OPTION( pugixml_shared_library 
   "Use shared library"
   "${BUILD_SHARED_LIBRARIES}"
@@ -64,7 +64,7 @@ else()
       "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugiconfig.hpp"
       "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugixml.hpp"
     PRIVATE
-      "${CMAKE_CURRENT_SOURE_DIR}/src/src/pugixml.cpp"
+      "${CMAKE_CURRENT_SOURCE_DIR}/src/src/pugixml.cpp"
   )
   target_include_directories( pugixml-adapter PUBLIC src/src )
 endif()
