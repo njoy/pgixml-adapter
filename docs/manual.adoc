@@ -1287,7 +1287,9 @@ bool xml_attribute::set_value(unsigned int rhs);
 bool xml_attribute::set_value(long rhs);
 bool xml_attribute::set_value(unsigned long rhs);
 bool xml_attribute::set_value(double rhs);
+bool xml_attribute::set_value(double rhs, int precision);
 bool xml_attribute::set_value(float rhs);
+bool xml_attribute::set_value(float rhs, int precision);
 bool xml_attribute::set_value(bool rhs);
 bool xml_attribute::set_value(long long rhs);
 bool xml_attribute::set_value(unsigned long long rhs);
@@ -1378,16 +1380,18 @@ include::samples/modify_add.cpp[tags=code]
 [[modify.remove]]
 === Removing nodes/attributes
 
-[[xml_node::remove_attribute]][[xml_node::remove_child]]
+[[xml_node::remove_attribute]][[xml_node::remove_attributes]][[xml_node::remove_child]][[xml_node::remove_children]]
 If you do not want your document to contain some node or attribute, you can remove it with one of the following functions:
 
 [source]
 ----
 bool xml_node::remove_attribute(const xml_attribute& a);
+bool xml_node::remove_attributes();
 bool xml_node::remove_child(const xml_node& n);
+bool xml_node::remove_children();
 ----
 
-`remove_attribute` removes the attribute from the attribute list of the node, and returns the operation result. `remove_child` removes the child node with the entire subtree (including all descendant nodes and attributes) from the document, and returns the operation result. Removing fails if one of the following is true:
+`remove_attribute` removes the attribute from the attribute list of the node, and returns the operation result. `remove_child` removes the child node with the entire subtree (including all descendant nodes and attributes) from the document, and returns the operation result. `remove_attributes` removes all the attributes of the node, and returns the operation result. `remove_children` removes all the child nodes of the node, and returns the operation result. Removing fails if one of the following is true:
 
 * The node the function is called on is null;
 * The attribute/node to be removed is null;
@@ -1437,7 +1441,9 @@ bool xml_text::set(unsigned int rhs);
 bool xml_text::set(long rhs);
 bool xml_text::set(unsigned long rhs);
 bool xml_text::set(double rhs);
+bool xml_text::set(double rhs, int precision);
 bool xml_text::set(float rhs);
+bool xml_text::set(float rhs, int precision);
 bool xml_text::set(bool rhs);
 bool xml_text::set(long long rhs);
 bool xml_text::set(unsigned long long rhs);
@@ -2131,6 +2137,31 @@ Because of the differences in document object models, performance considerations
 
 :!numbered:
 
+[[v1.10]]
+=== v1.10 ^2019-09-15^
+
+Maintenance release. Changes:
+
+* Behavior changes:
+	. Tab characters (ASCII 9) in attribute values are now encoded as '&#9;' to survive roundtripping
+	. `>` characters are no longer escaped in attribute values
+
+* New features:
+	. Add Visual Studio .natvis files to improve debugging experience
+	. CMake improvements (USE_POSTFIX and BUILD_SHARED_AND_STATIC_LIBS options for building multiple versions and pkg-config tweaks)
+	. Add format_skip_control_chars formatting flag to skip non-printable ASCII characters that are invalid to use in well-formed XML files
+	. Add format_attribute_single_quote formatting flag to use single quotes for attribute values instead of default double quotes.
+
+* XPath improvements:
+	. XPath union now results in a stable order that doesn't depend on memory allocations; crucially, this may require sorting the output of XPath query operation if you rely on the document-ordered traversal
+	. Improve performance of XPath union operation, making it ~2x faster
+
+* Compatibility improvements:
+	. Fix Visual Studio warnings when built in a DLL configuration
+	. Fix static analysis false positives in Coverity and clang
+	. Fix Wdouble-promotion warnings in gcc
+	. Add Visual Studio 2019 support for NuGet packages
+
 [[v1.9]]
 === v1.9 ^2018-04-04^
 
@@ -2655,6 +2686,7 @@ enum +++<a href="#xpath_value_type">xpath_value_type</a>+++
 [source,subs="+macros"]
 ----
 // Formatting options bit flags:
+const unsigned int +++<a href="#format_attribute_single_quote">format_attribute_single_quote</a>+++
 const unsigned int +++<a href="#format_default">format_default</a>+++
 const unsigned int +++<a href="#format_indent">format_indent</a>+++
 const unsigned int +++<a href="#format_indent_attributes">format_indent_attributes</a>+++
@@ -2842,8 +2874,10 @@ const unsigned int +++<a href="#parse_wnorm_attribute">parse_wnorm_attribute</a>
 
     bool +++<a href="#xml_node::remove_attribute">remove_attribute</a>+++(const xml_attribute& a);
     bool +++<a href="#xml_node::remove_attribute">remove_attribute</a>+++(const char_t* name);
+    bool +++<a href="#xml_node::remove_attributes">remove_attributes</a>+++();
     bool +++<a href="#xml_node::remove_child">remove_child</a>+++(const xml_node& n);
     bool +++<a href="#xml_node::remove_child">remove_child</a>+++(const char_t* name);
+    bool +++<a href="#xml_node::remove_children">remove_children</a>+++();
 
     xml_parse_result +++<a href="#xml_node::append_buffer">append_buffer</a>+++(const void* contents, size_t size, unsigned int options = parse_default, xml_encoding encoding = encoding_auto);
 
